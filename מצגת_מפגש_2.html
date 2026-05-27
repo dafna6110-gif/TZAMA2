@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מפגש 2 - מהאני לאנחנו</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:    #1B3060;
+  --navy2:   #233b7a;
+  --gold:    #B8860B;
+  --gold-bg: #FFFBEE;
+  --talya:   #C04000;
+  --talya-bg:#FFF4EE;
+  --res:     #2C3A8A;
+  --res-bg:  #EDF0FB;
+  --green:   #1A5C2A;
+  --green-bg:#EDF7EF;
+  --text:    #0D1421;
+  --muted:   #4B5563;
+  --border:  #D1D5DB;
+  --light:   #F8F9FB;
+}
+
+html, body {
+  height: 100%;
+  background: #18192a;
+  font-family: 'Arial Hebrew', 'Segoe UI', Arial, sans-serif;
+  direction: rtl;
+  overflow: hidden;
+}
+
+/* ──── SLIDE ENGINE ──── */
+#stage {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  width: 1280px;
+  height: 720px;
+  background: white;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  transform-origin: center center;
+  z-index: 0;
+}
+.slide.active {
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+/* ──── NAV ──── */
+#nav {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  padding: 7px 18px;
+  border-radius: 40px;
+  z-index: 999;
+}
+#nav button {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 6px;
+  padding: 5px 18px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background .15s;
+  font-family: Arial, sans-serif;
+}
+#nav button:hover { background: rgba(255,255,255,0.28); }
+#counter {
+  color: rgba(255,255,255,.85);
+  font-size: 13px;
+  min-width: 52px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  letter-spacing: .5px;
+}
+
+/* ──── SHARED SLIDE PARTS ──── */
+.slide-num {
+  position: absolute;
+  bottom: 16px;
+  left: 36px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  opacity: 0.55;
+  font-family: Arial, sans-serif;
+  letter-spacing: .5px;
+}
+.bottom-bar {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 6px;
+  background: var(--navy);
+}
+.bottom-bar.gold  { background: var(--gold); }
+.bottom-bar.talya { background: var(--talya); }
+.bottom-bar.res   { background: var(--res); }
+
+/* ──── TYPOGRAPHY HELPERS ──── */
+.tag {
+  display: inline-block;
+  background: var(--navy);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 4px 16px;
+  border-radius: 20px;
+  letter-spacing: .5px;
+  margin-bottom: 18px;
+}
+.tag.gold  { background: var(--gold); }
+.tag.talya { background: var(--talya); }
+.tag.res   { background: var(--res); }
+.tag.green { background: var(--green); }
+
+/* ════════════════════════════════
+   SLIDE 1 - TITLE
+═════════════════════════════════ */
+#s1 {
+  background: var(--navy);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#s1 .pre {
+  font-size: 17px;
+  color: rgba(255,255,255,.55);
+  letter-spacing: 2px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+#s1 h1 {
+  font-size: 72px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+  text-align: center;
+}
+#s1 .sub {
+  margin-top: 14px;
+  font-size: 28px;
+  color: rgba(255,255,255,.75);
+  font-weight: 400;
+  text-align: center;
+}
+#s1 .divider {
+  width: 80px; height: 4px;
+  background: var(--gold);
+  border-radius: 2px;
+  margin: 28px auto;
+}
+#s1 .org {
+  font-size: 15px;
+  color: rgba(255,255,255,.4);
+  letter-spacing: 1px;
+}
+
+/* ════════════════════════════════
+   SLIDE 2 - TALYA
+═════════════════════════════════ */
+#s2 {
+  background: var(--talya-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 100px;
+}
+#s2 .circle {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  background: var(--talya);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px;
+  margin-bottom: 24px;
+  color: white;
+  font-weight: 900;
+}
+#s2 h2 {
+  font-size: 42px;
+  font-weight: 900;
+  color: var(--talya);
+  margin-bottom: 10px;
+  text-align: center;
+}
+#s2 .stats {
+  display: flex;
+  gap: 40px;
+  margin: 18px 0 30px;
+}
+#s2 .stat {
+  text-align: center;
+}
+#s2 .stat .num {
+  font-size: 44px;
+  font-weight: 900;
+  color: var(--navy);
+  line-height: 1;
+}
+#s2 .stat .lbl {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+#s2 .key {
+  background: var(--navy);
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 16px 40px;
+  border-radius: 12px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ════════════════════════════════
+   SLIDE 3 - I to WE
+═════════════════════════════════ */
+#s3 {
+  background: white;
+  padding: 42px 70px 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+#s3 .main-title {
+  font-size: 34px;
+  font-weight: 900;
+  color: var(--navy);
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+#s3 .sub {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+#s3 .cards {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+#s3 .card {
+  flex: 1;
+  background: var(--light);
+  border-top: 5px solid var(--navy);
+  border-radius: 0 0 12px 12px;
+  padding: 22px 18px;
+  text-align: center;
+}
+#s3 .card-icon {
+  font-size: 34px;
+  margin-bottom: 12px;
+}
+#s3 .card-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.5;
+}
+#s3 .gottman-box {
+  background: var(--res-bg);
+  border-right: 5px solid var(--res);
+  padding: 14px 20px;
+  border-radius: 0 10px 10px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.7;
+}
+#s3 .gottman-box strong { color: var(--res); }
+
+/* ════════════════════════════════
+   SLIDE 4 - THE FREEZE
+═════════════════════════════════ */
+#s4 {
+  background: var(--light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 100px;
+}
+#s4 .big-quote {
+  font-size: 68px;
+  font-weight: 900;
+  color: var(--navy);
+  text-align: center;
+  line-height: 1.2;
+  margin-bottom: 30px;
+  position: relative;
+}
+#s4 .big-quote::before {
+  content: '"';
+  font-size: 120px;
+  color: var(--gold);
+  position: absolute;
+  top: -30px;
+  right: -20px;
+  line-height: 1;
+  opacity: .4;
+}
+#s4 .freeze {
+  font-size: 26px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ════════════════════════════════
+   SLIDE 5 - THE REAL QUESTION
+═════════════════════════════════ */
+#s5 {
+  background: white;
+  padding: 55px 80px;
+}
+#s5 h2 {
+  font-size: 34px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 32px;
+}
+#s5 .compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+#s5 .box {
+  padding: 24px 28px;
+  border-radius: 12px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+#s5 .box.wrong {
+  background: #FEF2F2;
+  border: 2px solid #EF4444;
+  color: #991B1B;
+}
+#s5 .box.right {
+  background: var(--green-bg);
+  border: 2px solid var(--green);
+  color: var(--green);
+}
+#s5 .box .label {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  opacity: .7;
+}
+#s5 .answer {
+  background: var(--navy);
+  color: white;
+  font-size: 19px;
+  font-weight: 700;
+  padding: 16px 28px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ════════════════════════════════
+   SLIDE 6 -6 TOOLS OVERVIEW
+═════════════════════════════════ */
+#s6 {
+  background: white;
+  padding: 50px 70px;
+}
+#s6 h2 {
+  font-size: 34px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 32px;
+  text-align: center;
+}
+#s6 .grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 18px;
+}
+#s6 .tool-card {
+  background: var(--light);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  transition: border-color .2s;
+}
+#s6 .tool-card:hover { border-color: var(--navy); }
+#s6 .num {
+  width: 38px; height: 38px;
+  background: var(--navy);
+  color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+#s6 .tool-card .ttl {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.35;
+}
+
+/* ════════════════════════════════
+   SLIDE 7 - TOOL 1: STRENGTH
+═════════════════════════════════ */
+#s7 {
+  background: white;
+  padding: 50px 70px;
+}
+#s7 h2 {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 28px;
+}
+#s7 .two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 26px;
+}
+#s7 .col {
+  padding: 22px 24px;
+  border-radius: 12px;
+}
+#s7 .col.weak {
+  background: #FEF2F2;
+  border-right: 5px solid #EF4444;
+}
+#s7 .col.strong {
+  background: var(--green-bg);
+  border-right: 5px solid var(--green);
+}
+#s7 .col .col-title {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+#s7 .col.weak .col-title { color: #DC2626; }
+#s7 .col.strong .col-title { color: var(--green); }
+#s7 .col .item {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+#s7 .research {
+  background: var(--res-bg);
+  border-right: 5px solid var(--res);
+  padding: 14px 20px;
+  border-radius: 0 10px 10px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+#s7 .research strong { color: var(--res); }
+
+/* ════════════════════════════════
+   SLIDE 8 - TOOL 2: TALK GENERAL
+═════════════════════════════════ */
+#s8 {
+  background: white;
+  padding: 50px 70px;
+}
+#s8 h2 {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+#s8 .why {
+  font-size: 17px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 26px;
+}
+#s8 .opps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+#s8 .opp {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--light);
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+#s8 .opp-icon { font-size: 22px; flex-shrink: 0; }
+#s8 .message {
+  background: var(--navy);
+  color: white;
+  font-size: 20px;
+  font-weight: 800;
+  padding: 16px 28px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* ════════════════════════════════
+   SLIDE 9 - YASMIN
+═════════════════════════════════ */
+#s9 {
+  background: var(--talya-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 120px;
+}
+#s9 .label {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--talya);
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+#s9 .quote1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--muted);
+  font-style: italic;
+  text-align: center;
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+#s9 .arrow { font-size: 32px; color: var(--talya); margin-bottom: 24px; }
+#s9 .question {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--navy);
+  text-align: center;
+  line-height: 1.5;
+}
+#s9 .insight {
+  margin-top: 28px;
+  background: var(--navy);
+  color: white;
+  font-size: 19px;
+  font-weight: 700;
+  padding: 14px 32px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* ════════════════════════════════
+   SLIDE 10 - WALLERSTEIN
+═════════════════════════════════ */
+#s10 {
+  background: white;
+  padding: 50px 70px;
+}
+#s10 .top-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+#s10 h2 {
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--navy);
+}
+#s10 .years {
+  font-size: 18px;
+  color: var(--muted);
+  font-weight: 600;
+}
+#s10 .timeline {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+#s10 .phase {
+  background: var(--light);
+  border-radius: 12px;
+  padding: 20px 22px;
+  text-align: center;
+}
+#s10 .phase .p-label {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--muted);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+#s10 .phase .p-val {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.4;
+}
+#s10 .arrow-mid {
+  font-size: 32px;
+  color: var(--gold);
+  text-align: center;
+}
+#s10 .quote-box {
+  background: var(--res-bg);
+  border-right: 5px solid var(--res);
+  padding: 14px 20px;
+  border-radius: 0 10px 10px 0;
+  font-style: italic;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+#s10 .conclusion {
+  background: var(--navy);
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
+  padding: 14px 24px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* ════════════════════════════════
+   SLIDE 11 - TOOL 3: MEETING
+═════════════════════════════════ */
+#s11 {
+  background: white;
+  padding: 50px 70px;
+}
+#s11 h2 {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 28px;
+}
+#s11 .rules {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+#s11 .rule {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  background: var(--light);
+}
+#s11 .rule-icon { font-size: 26px; flex-shrink: 0; }
+#s11 .rule-text {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+}
+#s11 .rule-text span { color: var(--navy); }
+#s11 .age-note {
+  background: var(--gold-bg);
+  border: 2px solid var(--gold);
+  border-radius: 10px;
+  padding: 12px 22px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+}
+
+/* ════════════════════════════════
+   SLIDE 12 - TOOL 4: SPLIT
+═════════════════════════════════ */
+#s12 {
+  background: white;
+  padding: 50px 70px;
+}
+#s12 h2 {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 28px;
+}
+#s12 .steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+#s12 .step {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 22px;
+  border-radius: 10px;
+  background: var(--light);
+  border-right: 5px solid var(--navy);
+}
+#s12 .step-num {
+  width: 36px; height: 36px;
+  background: var(--navy);
+  color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+#s12 .step-text {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+}
+#s12 .step-text strong { color: var(--navy); }
+#s12 .dont {
+  background: #FEF2F2;
+  border: 2px solid #EF4444;
+  border-radius: 10px;
+  padding: 12px 22px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #991B1B;
+  text-align: center;
+}
+
+/* ════════════════════════════════
+   SLIDE 13 - TOOLS 5+6
+═════════════════════════════════ */
+#s13 {
+  background: white;
+  padding: 50px 70px;
+}
+#s13 h2 {
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 28px;
+}
+#s13 .two-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+}
+#s13 .card {
+  background: var(--light);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 26px 28px;
+}
+#s13 .card .c-num {
+  display: inline-flex;
+  width: 36px; height: 36px;
+  background: var(--navy);
+  color: white;
+  border-radius: 50%;
+  align-items: center; justify-content: center;
+  font-weight: 900;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+#s13 .card h3 {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 14px;
+}
+#s13 .card p {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.6;
+}
+#s13 .card .highlight {
+  display: inline;
+  background: var(--gold-bg);
+  font-weight: 800;
+}
+
+/* ════════════════════════════════
+   SLIDE 14 - MODESTY
+═════════════════════════════════ */
+#s14 {
+  background: white;
+  padding: 50px 70px;
+}
+#s14 h2 {
+  font-size: 34px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+#s14 .tagline {
+  font-size: 18px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 28px;
+}
+#s14 .examples {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+#s14 .ex {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--light);
+  padding: 16px 18px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+#s14 .ex-icon { font-size: 24px; }
+#s14 .msg-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+#s14 .wrong-msg {
+  background: #FEF2F2;
+  border-right: 4px solid #EF4444;
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #991B1B;
+}
+#s14 .right-msg {
+  background: var(--green-bg);
+  border-right: 4px solid var(--green);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--green);
+}
+
+/* ════════════════════════════════
+   SLIDE 15 - RELIGIOUS TOUCH
+═════════════════════════════════ */
+#s15 {
+  background: var(--gold-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 120px;
+}
+#s15 h2 {
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 30px;
+  text-align: center;
+}
+#s15 .points {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  margin-bottom: 28px;
+}
+#s15 .pt {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background: white;
+  padding: 18px 24px;
+  border-radius: 12px;
+  border-right: 5px solid var(--gold);
+}
+#s15 .pt-icon { font-size: 26px; flex-shrink: 0; }
+#s15 .pt-text {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.45;
+}
+#s15 .insight {
+  background: var(--navy);
+  color: white;
+  font-size: 19px;
+  font-weight: 800;
+  padding: 14px 32px;
+  border-radius: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+/* ════════════════════════════════
+   SLIDE 16 - WHAT COMES FIRST
+═════════════════════════════════ */
+#s16 {
+  background: white;
+  padding: 50px 70px;
+}
+#s16 h2 {
+  font-size: 34px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 28px;
+}
+#s16 .parallel {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  gap: 0;
+  align-items: center;
+  margin-bottom: 26px;
+}
+#s16 .lane {
+  padding: 24px 26px;
+  border-radius: 14px;
+  background: var(--light);
+  text-align: center;
+}
+#s16 .lane h3 {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+#s16 .lane p {
+  font-size: 16px;
+  color: var(--muted);
+  font-weight: 600;
+  line-height: 1.5;
+}
+#s16 .plus {
+  font-size: 36px;
+  color: var(--gold);
+  text-align: center;
+  font-weight: 900;
+}
+#s16 .gottman {
+  background: var(--res-bg);
+  border-right: 5px solid var(--res);
+  padding: 14px 20px;
+  border-radius: 0 10px 10px 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+}
+#s16 .gottman strong { color: var(--res); }
+
+/* ════════════════════════════════
+   SLIDE 17 - ALIENATION PIVOT
+═════════════════════════════════ */
+#s17 {
+  background: var(--navy);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 100px;
+}
+#s17 .usual {
+  font-size: 22px;
+  color: rgba(255,255,255,.5);
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+#s17 .usual span {
+  text-decoration: line-through;
+  opacity: .7;
+}
+#s17 .divider-line {
+  width: 60px; height: 3px;
+  background: var(--gold);
+  border-radius: 2px;
+  margin: 0 auto 24px;
+}
+#s17 .new-q {
+  font-size: 44px;
+  font-weight: 900;
+  color: white;
+  text-align: center;
+  line-height: 1.3;
+}
+#s17 .new-q span { color: var(--gold); }
+
+/* ════════════════════════════════
+   SLIDE 18 - WHAT PARENT CARRIES
+═════════════════════════════════ */
+#s18 {
+  background: white;
+  padding: 50px 70px;
+}
+#s18 h2 {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 26px;
+}
+#s18 .items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+#s18 .item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--light);
+  padding: 16px 18px;
+  border-radius: 10px;
+}
+#s18 .item-icon { font-size: 22px; flex-shrink: 0; }
+#s18 .item-text {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+}
+#s18 .boss {
+  background: var(--res-bg);
+  border-right: 5px solid var(--res);
+  padding: 14px 20px;
+  border-radius: 0 10px 10px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+#s18 .boss strong { color: var(--res); }
+
+/* ════════════════════════════════
+   SLIDE 19 - BLACK ON WHITE
+═════════════════════════════════ */
+#s19 {
+  background: white;
+  padding: 50px 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#s19 h2 {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 26px;
+}
+#s19 .contrast-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  border: 2px solid var(--border);
+}
+#s19 .side {
+  padding: 28px 30px;
+}
+#s19 .side.full {
+  background: var(--green-bg);
+  border-left: 2px solid var(--border);
+}
+#s19 .side.empty { background: #F9FAFB; }
+#s19 .side .s-title {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+#s19 .side.full .s-title { color: var(--green); }
+#s19 .side.empty .s-title { color: #9CA3AF; }
+#s19 .side .s-item {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+#s19 .side.empty .s-item { color: #9CA3AF; }
+#s19 .conclusion {
+  background: var(--navy);
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
+  padding: 14px 24px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ════════════════════════════════
+   SLIDE 20 - THREE CLINICAL TOOLS
+═════════════════════════════════ */
+#s20 {
+  background: white;
+  padding: 50px 70px;
+}
+#s20 h2 {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 28px;
+}
+#s20 .tools {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+#s20 .ctool {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  background: var(--light);
+  padding: 18px 22px;
+  border-radius: 12px;
+  border-right: 5px solid var(--navy);
+}
+#s20 .ct-num {
+  width: 38px; height: 38px;
+  background: var(--navy);
+  color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+#s20 .ct-content .ct-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 5px;
+}
+#s20 .ct-content .ct-desc {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ════════════════════════════════
+   SLIDE 21 - NAMING THE MOMENT
+═════════════════════════════════ */
+#s21 {
+  background: white;
+  padding: 50px 70px;
+}
+#s21 h2 {
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+#s21 .sub {
+  font-size: 17px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+#s21 .example-flow {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+#s21 .ef-box {
+  flex: 1;
+  background: var(--light);
+  border-radius: 12px;
+  padding: 18px 20px;
+  text-align: center;
+}
+#s21 .ef-box .ef-title {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+#s21 .ef-box .ef-val {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.4;
+}
+#s21 .ef-arrow {
+  font-size: 28px;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+#s21 .value-boxes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+#s21 .vb {
+  background: var(--res-bg);
+  border-right: 4px solid var(--res);
+  padding: 14px 18px;
+  border-radius: 0 10px 10px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* ════════════════════════════════
+   SLIDE 22 - BACK TO TALYA
+═════════════════════════════════ */
+#s22 {
+  background: var(--talya-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 120px;
+}
+#s22 .circle {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: var(--talya);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 22px;
+}
+#s22 .status {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+#s22 .status strong { color: var(--text); }
+#s22 .big-close {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--navy);
+  text-align: center;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+#s22 .final {
+  background: var(--navy);
+  color: white;
+  font-size: 20px;
+  font-weight: 800;
+  padding: 16px 40px;
+  border-radius: 12px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ════════════════════════════════
+   SLIDE 23 - RESEARCH TABLE
+═════════════════════════════════ */
+#s23 {
+  background: white;
+  padding: 45px 60px;
+}
+#s23 h2 {
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 22px;
+}
+#s23 table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14.5px;
+}
+#s23 th {
+  background: var(--navy);
+  color: white;
+  padding: 10px 16px;
+  text-align: right;
+  font-weight: 800;
+  font-size: 14px;
+}
+#s23 td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.5;
+  font-weight: 600;
+}
+#s23 tr:nth-child(even) td { background: var(--light); }
+#s23 td:first-child { font-weight: 800; color: var(--navy); }
+
+/* ──── PRINT ──── */
+@media print {
+  html, body { background: white; overflow: visible; height: auto; }
+  #nav { display: none; }
+  #stage { position: static; display: block; }
+  .slide {
+    display: block !important;
+    position: relative;
+    width: 297mm; height: 167mm;
+    page-break-after: always;
+    transform: none !important;
+    margin: 0;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="stage">
+
+<!-- ══ SLIDE 1 ══ -->
+<div class="slide active" id="s1">
+  <p class="pre">מפגש 2 &nbsp;|&nbsp; מכללת צמאה</p>
+  <h1>מהאני לאנחנו</h1>
+  <p class="sub">כשיש ילדים בתמונה</p>
+  <div class="divider"></div>
+  <p class="org">טיפול, ליווי וזוגיות בפרק ב</p>
+  <div class="bottom-bar gold"></div>
+  <div class="slide-num">1 / 22</div>
+</div>
+
+<!-- ══ SLIDE 2 ══ -->
+<div class="slide" id="s2">
+  <div class="tag talya">הסיפור הקליני</div>
+  <div class="circle">ט</div>
+  <h2>טליה</h2>
+  <div class="stats">
+    <div class="stat"><div class="num">1</div><div class="lbl">שנה אחרי גירושים</div></div>
+    <div class="stat"><div class="num">2</div><div class="lbl">בנות קטנות</div></div>
+    <div class="stat"><div class="num">4+2</div><div class="lbl">גילאי הבנות</div></div>
+  </div>
+  <div class="key">הליווי לפרק ב מתחיל עכשיו —<br>לפני שמישהו מגיע</div>
+  <div class="bottom-bar talya"></div>
+  <div class="slide-num">2 / 22</div>
+</div>
+
+<!-- ══ SLIDE 3 ══ -->
+<div class="slide" id="s3">
+  <div class="main-title">התהליך לפרק ב מתחיל עכשיו - לא רק כשהוא יגיע</div>
+  <div class="sub">מה בונים כשהוא עדיין לא שם</div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🌱</div>
+      <div class="card-text">מודלינג לילדים:<br>אתגר הוא הזדמנות לצמיחה</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">💪</div>
+      <div class="card-text">אני סומכת עליכם —<br>ואתם מסוגלים</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">❤️</div>
+      <div class="card-text">זוגיות היא דבר חשוב ומשמעותי בחיים</div>
+    </div>
+  </div>
+  <div class="gottman-box">
+    <strong>Gottman (1999):</strong> זוגות שמצליחים בפרק ב הם אלה שעשו "עיבוד" של מה נשבר - לא כאשמה אלא כהבנה. ההבדל בין מי שחוזרת על אותו דפוס לבין מי שבונה משהו אחר נמצא בנכונות לשאול את השאלה הזו.
+  </div>
+  <div class="bottom-bar"></div>
+  <div class="slide-num">3 / 22</div>
+</div>
+
+<!-- ══ SLIDE 4 ══ -->
+<div class="slide" id="s4">
+  <div class="tag talya">הרגע שכל אמא מכירה</div>
+  <div class="big-quote">אנחנו רוצות את אבא</div>
+  <div class="freeze">טליה קופאת.</div>
+  <div class="bottom-bar talya"></div>
+  <div class="slide-num">4 / 22</div>
+</div>
+
+<!-- ══ SLIDE 5 ══ -->
+<div class="slide" id="s5">
+  <h2>השאלה האמיתית</h2>
+  <div class="compare">
+    <div class="box wrong">
+      <div class="label">❌ לא זו השאלה</div>
+      "למה הן לא מעריכות אותי?"
+    </div>
+    <div class="box right">
+      <div class="label">✅ זו השאלה</div>
+      "האם אני עושה מה שנכון - או מה שיקנה אותן?"
+    </div>
+  </div>
+  <div class="answer">מה יתן לילדים ביטחון? &nbsp;|&nbsp; מה יתן להם כלים לחיים?<br>
+  <span style="font-size:17px; opacity:.85; font-weight:600;">הורה שמציבה גבול מתוך ערך בונה משהו. הורה שמוותרת כדי שיאהבו אותה - קונה שקט רגעי.</span></div>
+  <div class="bottom-bar"></div>
+  <div class="slide-num">5 / 22</div>
+</div>
+
+<!-- ══ SLIDE 6 ══ -->
+<div class="slide" id="s6">
+  <h2>6 כלים לחיבור הילדים למערכת הזוגית</h2>
+  <div class="grid">
+    <div class="tool-card"><div class="num">1</div><div class="ttl">לראות כוח - לא מסכנות</div></div>
+    <div class="tool-card"><div class="num">2</div><div class="ttl">לדבר על זוגיות באופן כללי</div></div>
+    <div class="tool-card"><div class="num">3</div><div class="ttl">ההיכרות - עם פעילות ברקע</div></div>
+    <div class="tool-card"><div class="num">4</div><div class="ttl">פיצול המפגש הראשון</div></div>
+    <div class="tool-card"><div class="num">5</div><div class="ttl">חופשות - זמן ביולוגי מוגן</div></div>
+    <div class="tool-card"><div class="num">6</div><div class="ttl">חיבור הילדים שלי והילדים שלו</div></div>
+  </div>
+  <div class="bottom-bar gold"></div>
+  <div class="slide-num">6 / 22</div>
+</div>
+
+<!-- ══ SLIDE 7 ══ -->
+<div class="slide" id="s7">
+  <div class="tag green">כלי 1</div>
+  <h2>לראות כוח - לא מסכנות</h2>
+  <div class="two-col">
+    <div class="col weak">
+      <div class="col-title">❌ הסתכלות מסכנה</div>
+      <div class="item">עוברים בין שני בתים - מסכנים</div>
+      <div class="item">האבא לא משחרר - מסכנים</div>
+      <div class="item">האמא שתלטנית - מסכנים</div>
+    </div>
+    <div class="col strong">
+      <div class="col-title">✅ הסתכלות מעצימה</div>
+      <div class="item">לומד גמישות ויכולת הסתגלות</div>
+      <div class="item">לומד לקרוא מרחבים שונים</div>
+      <div class="item">לומד שאפשר לאהוב שני מקומות</div>
+    </div>
+  </div>
+  <div class="research"><strong>Masten (2001) - Ordinary Magic:</strong> ילדים ברמת עמידות גבוהה הם לא אלה שלא נחשפו לקושי - אלא אלה שהמבוגרים סביבם ראו בהם כוח. <strong>ההסתכלות של ההורה יוצרת את המציאות של הילד.</strong></div>
+  <div class="bottom-bar"></div>
+  <div class="slide-num">7 / 22</div>
+</div>
+
+<!-- ══ SLIDE 8 ══ -->
+<div class="slide" id="s8">
+  <div class="tag green">כלי 2</div>
+  <h2>לדבר עם הילדים על זוגיות - באופן כללי</h2>
+  <p class="why">כשהשיח כללי - הילד מדבר בפתיחות. לא חושש שמעליב מישהו ספציפי.</p>
+  <div class="opps">
+    <div class="opp"><div class="opp-icon">👫</div>"תראי איך הם מתווכחים ומוצאים דרך ביחד"</div>
+    <div class="opp"><div class="opp-icon">🚪</div>"תראי איך הוא דואג לה"</div>
+    <div class="opp"><div class="opp-icon">🧓</div>"תראי איך הם שם אחד לשני"</div>
+  </div>
+  <div class="message">זוגיות היא לא רק "שלא נהיה לבד" - זוגיות היא מנוע של צמיחה</div>
+  <div class="bottom-bar"></div>
+  <div class="slide-num">8 / 22</div>
+</div>
+
+<!-- ══ SLIDE 9 ══ -->
+<div class="slide" id="s9">
+  <div class="label">סיפור קליני - יסמין</div>
+  <div class="quote1">"אני לא רוצה להזדקן לבד"</div>
+  <div class="arrow">↓</div>
+  <div class="question">"את מחפשת מישהו שיציל אותך מבדידות —<br>או מישהו שיעזור לך לגדול?"</div>
+  <div class="insight">המעבר מ"אני" ל"אנחנו" הוא מרגש - וזה מסר שאפשר לתת לילדים</div>
+  <div class="bottom-bar talya"></div>
+  <div class="slide-num">9 / 22</div>
+</div>
+
+<!-- ══ SLIDE 10 ══ -->
+<div class="slide" id="s10">
+  <div class="top-row">
+    <div class="tag res">מחקר</div>
+    <h2>Wallerstein - אפקט השינה</h2>
+    <span class="years">131 ילדים | 25 שנה</span>
+  </div>
+  <div class="timeline">
+    <div class="phase">
+      <div class="p-label">בילדות</div>
+      <div class="p-val">רוב הילדים נראו מסתגלים היטב</div>
+    </div>
+    <div class="arrow-mid">←</div>
+    <div class="phase" style="background:#FEF2F2;">
+      <div class="p-label" style="color:#DC2626;">בגיל 19–24</div>
+      <div class="p-val" style="color:#991B1B;">קושי ביצירת קשרים זוגיים יציבים</div>
+    </div>
+  </div>
+  <div class="quote-box">"מעולם לא ראיתי שניים שנשארים ביחד - אני לא יודעת איך זה אמור להיראות כשזה עובד"</div>
+  <div class="conclusion">ילד שגדל לידה של זוגיות בריאה - מקבל מפה</div>
+  <div class="bottom-bar res"></div>
+  <div class="slide-num">10 / 22</div>
+</div>
+
+<!-- ══ SLIDE 11 ══ -->
+<div class="slide" id="s11">
+  <div class="tag green">כלי 3</div>
+  <h2>ההיכרות - איך עושים את זה נכון</h2>
+  <div class="rules">
+    <div class="rule">
+      <div class="rule-icon">⭐</div>
+      <div class="rule-text"><span>רק כשיש פוטנציאל משמעותי</span> - לא כל שני וחמישי</div>
+    </div>
+    <div class="rule">
+      <div class="rule-icon">🍕</div>
+      <div class="rule-text"><span>עם פעילות ברקע</span> - מבשלים, בונים, יוצרים<br><small style="font-weight:600; color:#6B7280;">כשהידיים עסוקות - המבוכה מתפוגגת. עשייה משותפת יוצרת קרבה (Aron, 1997)</small></div>
+    </div>
+    <div class="rule">
+      <div class="rule-icon">🚫</div>
+      <div class="rule-text">לא ישיבה פנים-אל-פנים "בואו נתוודע"</div>
+    </div>
+  </div>
+  <div class="age-note">⚠️ עובד כשהילד יכול להיות שותף אמיתי - גיל 8 ומעלה</div>
+  <div class="bottom-bar"></div>
+  <div class="slide-num">11 / 22</div>
+</div>
+
+<!-- ══ SLIDE 12 ══ -->
+<div class="slide" id="s12">
+  <div class="tag green">כלי 4</div>
+  <h2>פיצול המפגש הראשון - חיבור הוא לא מחייב</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">מאפשרים לילדים <strong>לבחור</strong> - מי שרוצה מגיע, מי שלא מוכן - ממתינים</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">הילד שהגיע ונהנה הופך ל<strong>גשר טבעי</strong> לאחים -"היה כיף. הוא בסדר."</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text"><strong>הזמן יעשה את שלו</strong> - חיבור שנוצר טבעי עמיד יותר מחיבור כפוי</div>
+    </div>
+  </div>
+  <div class="dont">לא ללחוץ &nbsp;|&nbsp; לא להסביר &nbsp;|&nbsp; לא לשדר אכזבה מהילד שלא הגיע</div>
+  <div class="bottom-bar"></div>
+  <div class="slide-num">12 / 22</div>
+</div>
+
+<!-- ══ SLIDE 13 ══ -->
+<div class="slide" id="s13">
+  <h2>כלים 5–6</h2>
+  <div class="two-cards">
+    <div class="card">
+      <div class="c-num">5</div>
+      <h3>חופשות משפחתיות</h3>
+      <p>חופשה עם כולם ביחד <span class="highlight">יתכן שלעולם לא תהיה מתאימה - וזה בסדר.</span><br><br>
+      מה כן: לאותו מקום - כל הורה עם ילדיו שלו. <strong>זמן ביולוגי מוגן</strong> אינו ריחוק, הוא הבנה.</p>
+    </div>
+    <div class="card">
+      <div class="c-num">6</div>
+      <h3>חיבור הילדים שלי והילדים שלו</h3>
+      <p>החיבור אולי <span class="highlight">לעולם לא יהיה טבעי - וזה בסדר.</span><br><br>
+      מה כן: פעילות עם תוכן - שבי ישראל, יום הולדת, סדנה. כשיש משהו מחזיק - קשר יכול לצמוח <strong>בשוליים, בלי לחץ.</strong></p>
+    </div>
+  </div>
+  <div class="bottom-bar gold"></div>
+  <div class="slide-num">13 / 22</div>
+</div>
+
+<!-- ══ SLIDE 14 ══ -->
+<div class="slide" id="s14">
+  <div class="tag">צניעות</div>
+  <h2>תרבות שבונים עכשיו - לפני שמישהו מגיע</h2>
+  <p class="tagline">לא כלל בגלל בן הזוג - אלא אורח חיים שקדם לו</p>
+  <div class="examples">
+    <div class="ex"><div class="ex-icon">🚿</div>יוצאים מהמקלחת עטופים - מתלבשים בחדר</div>
+    <div class="ex"><div class="ex-icon">👗</div>פיג'מה מכסה - לא תחתונים בשטחים משותפים</div>
+    <div class="ex"><div class="ex-icon">🚪</div>דפיקה בדלת לפני כניסה לחדר</div>
+    <div class="ex"><div class="ex-icon">🏠</div>בשטחים משותפים - לבוש מתאים</div>
+  </div>
+  <div class="msg-compare">
+    <div class="wrong-msg">❌ "יש לנו גבר בבית - תתכסי"</div>
+    <div class="right-msg">✅ "אנחנו מכבדות את עצמנו ואת הסובבים אותנו"</div>
+  </div>
+  <div class="bottom-bar"></div>
+  <div class="slide-num">14 / 22</div>
+</div>
+
+<!-- ══ SLIDE 15 ══ -->
+<div class="slide" id="s15">
+  <div class="tag gold">נגיעה דתית</div>
+  <h2>הכיוון ההלכתי</h2>
+  <div class="points">
+    <div class="pt">
+      <div class="pt-icon">📖</div>
+      <div class="pt-text">איסור ייחוד - הגדרות שמשתנות לפי פוסק ולפי גיל הילדים</div>
+    </div>
+    <div class="pt">
+      <div class="pt-icon">🤝</div>
+      <div class="pt-text">חשוב להגיד לקהל הדתי: <strong>להתייעץ עם רב לגבי המצב הספציפי שלהן</strong></div>
+    </div>
+  </div>
+  <div class="insight">כשאמא אומרת "שאלתי רב ויש הנחיות" - היא בונה אמון:<br>מבוגרים אחראיים לא מנחשים - הם שואלים</div>
+  <div class="bottom-bar gold"></div>
+  <div class="slide-num">15 / 22</div>
+</div>
+
+<!-- ══ SLIDE 16 ══ -->
+<div class="slide" id="s16">
+  <h2>מה בא קודם - זוגיות או הורות?</h2>
+  <div class="parallel">
+    <div class="lane">
+      <h3>🧸 הורות</h3>
+      <p>כבר קיימת. לא מחכה לזוגיות. הלוגיסטיקה, ההחלטות, האהבה - כל אלה פועלים עכשיו.</p>
+    </div>
+    <div class="plus">+</div>
+    <div class="lane">
+      <h3>💑 זוגיות</h3>
+      <p>לא מתחרה בהורות -<strong>מחזקת אותה.</strong> הורה עם עוגן זוגי יש לו יותר מה לתת לילדים.</p>
+    </div>
+  </div>
+  <div class="gottman"><strong>Gottman &amp; Gottman (2006):</strong> איכות הזוגיות מנבאת הסתגלות ילדים יותר מהסדרי משמורת ומבנה המשפחה. <strong>זוגיות טובה היא לא על חשבון הילדים - היא בשבילם.</strong></div>
+  <div class="bottom-bar"></div>
+  <div class="slide-num">16 / 22</div>
+</div>
+
+<!-- ══ SLIDE 17 ══ -->
+<div class="slide" id="s17">
+  <div class="usual">השאלה הרגילה: <span>מה קורה עם הילד? מה קורה עם הגרוש/ה?</span></div>
+  <div class="divider-line"></div>
+  <div class="new-q">השאלה שלנו:<br><span>מה ניכור הורי עושה לביניהם?</span></div>
+  <div class="bottom-bar gold"></div>
+  <div class="slide-num">17 / 22</div>
+</div>
+
+<!-- ══ SLIDE 18 ══ -->
+<div class="slide" id="s18">
+  <div class="tag">ניכור הורי</div>
+  <h2>מה ההורה המנוכר נושא</h2>
+  <div class="items">
+    <div class="item"><div class="item-icon">😔</div><div class="item-text">אבל ללא טקס - הילד חי, אך נעדר</div></div>
+    <div class="item"><div class="item-icon">😳</div><div class="item-text">בושה: "כנראה עשיתי משהו שגרם לזה"</div></div>
+    <div class="item"><div class="item-icon">😤</div><div class="item-text">כעס ללא כתובת - לא על הילד, לא רק על הגרוש/ה</div></div>
+    <div class="item"><div class="item-icon">📵</div><div class="item-text">מחכה - לכל שישי, לכל חג, לכל הודעה שלא מגיעה</div></div>
+  </div>
+  <div class="boss"><strong>Pauline Boss (2000) - Ambiguous Loss:</strong> אבל ללא מוות, ללא טקס, ללא סיום. <strong>אין לו נקודת סיום - לכן קשה יותר לעיכול מאבל רגיל.</strong></div>
+  <div class="bottom-bar res"></div>
+  <div class="slide-num">18 / 22</div>
+</div>
+
+<!-- ══ SLIDE 19 ══ -->
+<div class="slide" id="s19">
+  <div class="tag">הלבן על השחור</div>
+  <h2>הניגוד שמגדיל את הכאב</h2>
+  <div class="contrast-box">
+    <div class="side full">
+      <div class="s-title">🟢 בצד אחד של הבית</div>
+      <div class="s-item">ילדים מגיעים, מחבקים, רצים</div>
+      <div class="s-item">קוראים "אמא / אבא"</div>
+      <div class="s-item">בית מלא, רועש, חי</div>
+    </div>
+    <div class="side empty">
+      <div class="s-title">⚫ באותו רגע</div>
+      <div class="s-item">הטלפון שקט</div>
+      <div class="s-item">אין הודעה</div>
+      <div class="s-item">הריק נוכח</div>
+    </div>
+  </div>
+  <div class="conclusion">הוא לא רק מרגיש את ההיעדרות - הוא רואה כל רגע איך זה נראה כשזה קיים ושלו זה לא</div>
+  <div class="bottom-bar"></div>
+  <div class="slide-num">19 / 22</div>
+</div>
+
+<!-- ══ SLIDE 20 ══ -->
+<div class="slide" id="s20">
+  <div class="tag">כלים קליניים</div>
+  <h2>שלושה כלים לטיפול בזוג</h2>
+  <div class="tools">
+    <div class="ctool">
+      <div class="ct-num">1</div>
+      <div class="ct-content">
+        <div class="ct-title">לתת שם לרגע</div>
+        <div class="ct-desc">ליצור עם הזוג מילה משותפת לרגע -"רגע הריק". כשיש שם, הרגע מזוהה ולא מתפרץ לתוך היחסים כסתם קצר רוח.</div>
+      </div>
+    </div>
+    <div class="ctool">
+      <div class="ct-num">2</div>
+      <div class="ct-content">
+        <div class="ct-title">להבחין בין כאב לבעיה זוגית</div>
+        <div class="ct-desc">"האם זה כאב הניכור שמדבר - או שיש כאן משהו בינינו?" השאלה הזו, בחמלה, שוברת את הסיבוב הכרוני.</div>
+      </div>
+    </div>
+    <div class="ctool">
+      <div class="ct-num">3</div>
+      <div class="ct-content">
+        <div class="ct-title">"מה אתה/את צריך/ה ממני היום?"</div>
+        <div class="ct-desc">לא "מה קרה?" ולא "איך אתה?". שאלה ישירה שפותחת מקום - לשבת לצד, להסיח דעת, לשמוע בלי לפתור.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar"></div>
+  <div class="slide-num">20 / 22</div>
+</div>
+
+<!-- ══ SLIDE 21 ══ -->
+<div class="slide" id="s21">
+  <div class="tag res">העמקה - כלי 1</div>
+  <h2>לתת שם לרגע - איך זה עובד?</h2>
+  <p class="sub">ליצור שפה משותפת לפני שהרגע מגיע</p>
+  <div class="example-flow">
+    <div class="ef-box">
+      <div class="ef-title">המטפל שואל</div>
+      <div class="ef-val">"איך נקרא לרגעים האלה אצלכם?"</div>
+    </div>
+    <div class="ef-arrow">←</div>
+    <div class="ef-box">
+      <div class="ef-title">הזוג בוחר שם</div>
+      <div class="ef-val">"רגע הריק"</div>
+    </div>
+    <div class="ef-arrow">←</div>
+    <div class="ef-box">
+      <div class="ef-title">כשהרגע מגיע</div>
+      <div class="ef-val">"זה אחד מרגעי הריק"</div>
+    </div>
+  </div>
+  <div class="value-boxes">
+    <div class="vb">שניהם מבינים מיד מה קורה - בלי הסברים, בלי הגנות</div>
+    <div class="vb">הכאב מוצא מהאדם -"זה לא אני שבור/ה, זה רגע. ולרגע יש אורך חיים."</div>
+  </div>
+  <div class="bottom-bar res"></div>
+  <div class="slide-num">21 / 22</div>
+</div>
+
+<!-- ══ SLIDE 22 ══ -->
+<div class="slide" id="s22">
+  <div class="circle">ט</div>
+  <div class="status">
+    <strong>טליה</strong> עדיין לא בזוגיות.<br>
+    אבל היא כבר בונה - מבינה מה היה בפרק א, עומדת על גבולותיה מתוך ערך, מדברת עם בנותיה על אהבה.
+  </div>
+  <div class="big-close">היא מכינה את הבית —<br>לפני שמישהו דופק בדלת</div>
+  <div class="final">בנותיה לומדות: אפשר לכאוב ועדיין להתחיל מחדש.<br>הבית שהיא בונה עכשיו - זו המפה שהן לוקחות איתן.</div>
+  <div class="bottom-bar talya"></div>
+  <div class="slide-num">22 / 22</div>
+</div>
+
+
+</div><!-- /stage -->
+
+<!-- ══ NAV ══ -->
+<div id="nav">
+  <button onclick="go(-1)">&#8592;</button>
+  <span id="counter">1 / 22</span>
+  <button onclick="go(1)">&#8594;</button>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total  = slides.length;
+let cur = 0;
+
+function scaleSlideTo(slide) {
+  const sw = stage.clientWidth, sh = stage.clientHeight;
+  const scaleX = sw / 1280, scaleY = sh / 720;
+  const scale = Math.min(scaleX, scaleY) * 0.96;
+  slide.style.transform = `scale(${scale})`;
+  slide.style.left = `${(sw - 1280 * scale) / 2}px`;
+  slide.style.top  = `${(sh - 720  * scale) / 2}px`;
+}
+
+const stage = document.getElementById('stage');
+
+function show(n) {
+  slides[cur].classList.remove('active');
+  cur = (n + total) % total;
+  slides[cur].classList.add('active');
+  scaleSlideTo(slides[cur]);
+  document.getElementById('counter').textContent = `${cur+1} / ${total}`;
+}
+
+function go(d) { show(cur + d); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { go(1);  e.preventDefault(); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { go(-1); e.preventDefault(); }
+});
+
+window.addEventListener('resize', () => scaleSlideTo(slides[cur]));
+// ensure keyboard works immediately without needing a click
+document.documentElement.setAttribute('tabindex', '-1');
+document.documentElement.focus();
+
+// click on right half = next, left half = previous
+stage.addEventListener('click', e => {
+  document.documentElement.focus();
+  if (e.clientX > window.innerWidth / 2) go(1); else go(-1);
+});
+scaleSlideTo(slides[cur]);
+</script>
+</body>
+</html>
